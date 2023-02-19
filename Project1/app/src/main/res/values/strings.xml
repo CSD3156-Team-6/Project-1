@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Project 1</string>
+
+    <!--    Direction   -->
+    <string name="UP">UP</string>
+    <string name="DOWN">DOWN</string>
+    <string name="LEFT">LEFT</string>
+    <string name="RIGHT">RIGHT</string>
+    <!--    Direction   -->
+
 </resources>
