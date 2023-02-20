@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.csd3156.project1.R
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 class GameActivity : AppCompatActivity()
 {
@@ -23,6 +25,8 @@ class GameActivity : AppCompatActivity()
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
 
+    //val buttonTextX = findViewById<Button>(R.id.buttontestViewX)
+    //val buttonTextY = findViewById<Button>(R.id.buttontestViewY)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -129,31 +133,36 @@ class GameActivity : AppCompatActivity()
                     val y = event.values[1]
                     val z = event.values[2]
                     // perform calculations with x, y, and z values to detect tilt
-
-                    if (x < -2) {
+                    val textViewtextX = findViewById<TextView>(R.id.textViewtiltvalX)
+                    val textViewtextY = findViewById<TextView>(R.id.textViewtiltvalY)
+                    textViewtextX.text =  x.toString()
+                    textViewtextY.text =  y.toString()
+                    if ( x < -5) {
                         // device is tilted to the right
                         Snake.alive = true
                         if (Snake.direction != "left")
                             Snake.direction = "right"
-                    } else if (x > 2) {
+                    } else if (x > 5) {
                         // device is tilted to the left
                         Snake.alive = true
                         if (Snake.direction != "right")
                             Snake.direction = "left"
                     }
-                    else if (y > 2) {
+                    else if (y > 5) {
                         // device is tilted to the bottom
                         Snake.alive = true
                         if(Snake.direction != "up")
                             Snake.direction = "down"
                     }
-                    else if (y< 2) {
+                    else if (y< -5) {
                         // device is tilted to the top
                         Snake.alive = true
                         if(Snake.direction != "down")
                             Snake.direction = "up"
-                    }else {
+                    }
+                    else {
                         // device is not tilted left or right
+                        //Snake.alive =false
                     }
 
                 }
