@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "time_table")
 class Time (
-    @ColumnInfo(name = "time") val Time: Double,
+    @ColumnInfo(name = "time") val time: Double,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

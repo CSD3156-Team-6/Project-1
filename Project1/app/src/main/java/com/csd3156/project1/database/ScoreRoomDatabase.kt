@@ -1,7 +1,6 @@
 package com.csd3156.project1.database
 
 import android.content.Context
-import androidx.annotation.WorkerThread
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -11,7 +10,6 @@ import com.csd3156.project1.database.height.HeightDao
 import com.csd3156.project1.database.time.Time
 import com.csd3156.project1.database.time.TimeDao
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Database(entities = [Height::class, Time::class], version = 1, exportSchema = false)
@@ -24,7 +22,6 @@ public abstract class ScoreRoomDatabase: RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let {
                 scope.launch {
-
                 }
             }
         }
