@@ -8,6 +8,11 @@
     <string name="RIGHT">RIGHT</string>
     <!--    Direction   -->
 
+
+    <string name="SCORE">SCORE</string>
+    <string name="TIME">TIME</string>
+
+
     <string name="game_name">GAME</string>
     <string name="play_button">PLAY</string>
     <string name="score_button">SCORE</string>
