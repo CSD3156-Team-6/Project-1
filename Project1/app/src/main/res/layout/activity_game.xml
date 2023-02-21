@@ -5,38 +5,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BLACK"
-    android:padding="20dp"
     tools:context=".game.GameActivity">
+
+
+    <ImageView
+        android:id="@+id/idTopFrameImageView"
+        android:layout_width="380dp"
+        android:layout_height="128dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/gameCanvasID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ui_frame_white_rect"
+        android:contentDescription="@string/top_frame_ui"/>
+
+    <ImageView
+        android:id="@+id/idAppleImageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/idTopFrameImageView"
+        app:layout_constraintStart_toStartOf="@+id/idTopFrameImageView"
+        app:layout_constraintTop_toTopOf="@+id/idTopFrameImageView"
+        app:layout_constraintVertical_bias="0.485"
+        app:srcCompat="@drawable/apple"
+        android:contentDescription="@string/apple_ui"/>
 
     <TextView
         android:id="@+id/idTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00"
+        android:layout_marginEnd="40dp"
         android:fontFamily="@font/pressstart2p"
         android:textColor="#FFFFFF"
         android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/idTopFrameImageView"
+        app:layout_constraintEnd_toEndOf="@+id/idTopFrameImageView"
+        app:layout_constraintTop_toTopOf="@+id/idTopFrameImageView"
+        app:layout_constraintVertical_bias="0.448" />
 
     <TextView
         android:id="@+id/idScoreTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:fontFamily="@font/pressstart2p"
-        android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/gameCanvasID"
+        app:layout_constraintBottom_toBottomOf="@+id/idTopFrameImageView"
+        app:layout_constraintStart_toEndOf="@+id/idAppleImageView"
+        app:layout_constraintTop_toTopOf="@+id/idTopFrameImageView" />
+
+    <ImageView
+        android:id="@+id/idGameFrameImageView"
+        android:layout_width="380dp"
+        android:layout_height="380dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTimeTextView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ui_frame_white_square"
+        android:contentDescription="@string/game_frame_ui"/>
 
     <com.csd3156.project1.game.CanvasView
         android:id="@+id/gameCanvasID"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_width="360dp"
+        android:layout_height="360dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,5 +100,6 @@
         android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
