@@ -16,5 +16,8 @@
     <string name="game_name">GAME</string>
     <string name="play_button">PLAY</string>
     <string name="score_button">SCORE</string>
+    <string name="top_frame_ui">Top Frame UI</string>
+    <string name="apple_ui">Apple UI</string>
+    <string name="game_frame_ui">Game Frame UI</string>
 
 </resources>

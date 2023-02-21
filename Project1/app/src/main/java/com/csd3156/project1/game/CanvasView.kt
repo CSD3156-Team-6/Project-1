@@ -19,7 +19,7 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         snake.color = Color.GREEN
         apple.color = Color.RED
-        floor.color = Color.GRAY
+        floor.color = Color.DKGRAY
 
         canvas?.drawRect(0f,0f,1050f,1050f,floor)
 
