@@ -12,15 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.csd3156.project1.R
 import com.csd3156.project1.databinding.ActivityGameBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.w3c.dom.Text
 
 class GameActivity : AppCompatActivity()
 {
     private lateinit var binding: ActivityGameBinding
+    private lateinit var job: Job
 
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
@@ -39,7 +37,11 @@ class GameActivity : AppCompatActivity()
         WindowCompat.setDecorFitsSystemWindows(window, true)
         supportActionBar?.hide()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        findViewById<TextView>(R.id.idScoreTextView).text = "0"
+        val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
+        val startTime = System.currentTimeMillis()
+
+        job = CoroutineScope(Dispatchers.IO).launch {
             while (true)
             {
                 while (Snake.alive)
@@ -68,18 +70,50 @@ class GameActivity : AppCompatActivity()
                                 Snake.headX = 0f
                         }
                     }
+
+                    // kill snake if he bite himself
+                    for(bodyPart in Snake.bodyParts)
+                    {
+                        if (Snake.headX == bodyPart[0] && Snake.headY == bodyPart[1])
+                        {
+                            Snake.alive = false
+                            Snake.resetSnake()
+                        }
+                    }
+
                     // Convert the snake head to a body
                     Snake.bodyParts.add(arrayOf(Snake.headX, Snake.headY))
 
                     //If apple is eaten, then we dont delete the tail, leaving the snake extended by 1
                     if (Snake.headX == Apple.posX && Snake.headY == Apple.posY)
+                    {
+                        withContext(Dispatchers.Main) {
+                            val textView = findViewById<TextView>(R.id.idScoreTextView)
+                            val currentValue = textView.text.toString().toInt()
+                            val newValue = currentValue + 1
+                            textView.text = newValue.toString()
+                        }
                         Apple.generateAppleRandom()
+                    }
                     else
                         Snake.bodyParts.removeAt(0)
 
                     // Game speed
                     findViewById<CanvasView>(R.id.gameCanvasID).invalidate()
-                    delay(150)
+
+                    //Get Time
+                    withContext(Dispatchers.Main) {
+                        val elapsedTime = System.currentTimeMillis() - startTime
+                        val elapsedSeconds = elapsedTime / 1000
+                        val formattedTime = String.format(
+                            "%02d:%02d",
+                            (elapsedSeconds % 3600) / 60,
+                            elapsedSeconds % 60
+                        )
+                        timeTextView.text = formattedTime
+                    }
+
+                    delay(200)
                 }
             }
         }
@@ -136,4 +170,26 @@ class GameActivity : AppCompatActivity()
             }
         }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
     }
+
+    override fun onDestroy()
+    {
+        Snake.alive = false
+        Snake.resetSnake()
+        super.onDestroy()
+        job.cancel()
+    }
+
+    override fun onPause()
+    {
+        Snake.alive = false
+        super.onPause()
+    }
+
+    override fun onStop()
+    {
+        Snake.alive = false
+        super.onStop()
+    }
+
+
 }
