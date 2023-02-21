@@ -2,21 +2,22 @@ package com.csd3156.project1.database.height
 
 import com.csd3156.project1.database.UserPreferencesRepository
 import androidx.lifecycle.*
+import com.csd3156.project1.database.ScoreRepository
 import kotlinx.coroutines.launch
 
 
 class HeightViewModel(
-    private val repository: HeightRepository,
+    private val repository: ScoreRepository,
     private val userPreferencesRepository: UserPreferencesRepository): ViewModel() {
 
     val allHeight: LiveData<List<Height>> = repository.allHeight.asLiveData()
 
     fun insert(height: Height) = viewModelScope.launch {
-        repository.insert(height)
+        repository.insertHeight(height)
     }
 
     fun clear() = viewModelScope.launch {
-        repository.clear()
+        repository.clearHeight()
     }
 
     fun savePreference(preference: Boolean) = viewModelScope.launch {
@@ -32,8 +33,8 @@ class HeightViewModel(
     }
 }
 
-class FourDigitViewModelFactory(
-    private val repository: HeightRepository,
+class HeightViewModelFactory(
+    private val repository: ScoreRepository,
     private val userPreferencesRepository: UserPreferencesRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HeightViewModel::class.java)) {

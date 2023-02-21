@@ -8,11 +8,12 @@ import com.csd3156.project1.database.ScoreActivity
 import com.csd3156.project1.databinding.ActivityMainBinding
 import com.csd3156.project1.game.GameActivity
 import com.csd3156.project1.game.Snake
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
 class MainActivity : AppCompatActivity()
 {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)

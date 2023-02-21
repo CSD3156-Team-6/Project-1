@@ -10,37 +10,37 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.csd3156.project1.R
 
-class TimeListAdapter: ListAdapter<Time, TimeListAdapter.TimeViewHolder>(TimeComparator()) {
+class TimerListAdapter: ListAdapter<Timer, TimerListAdapter.TimerViewHolder>(TimerComparator()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimerViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.time_list, parent, false)
-        return TimeViewHolder(view)
+        return TimerViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TimeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TimerViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current.time.toString(), current.id.toString())
+        holder.bind(current.timer.toString(), current.id.toString())
     }
 
-    class TimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TimerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val timeItemView: TextView = itemView.findViewById(R.id.textViewTimeValue)
         private val idItemView: TextView = itemView.findViewById(R.id.textViewTimeIndex)
 
         @SuppressLint("SetTextI18n")
-        fun bind(time: String?, id: String?) {
-            timeItemView.text = time
+        fun bind(timer: String?, id: String?) {
+            timeItemView.text = timer
             idItemView.text = "#$id"
         }
     }
 
-    class TimeComparator: DiffUtil.ItemCallback<Time>() {
+    class TimerComparator: DiffUtil.ItemCallback<Timer>() {
 
-        override fun areItemsTheSame(oldItem: Time, newItem: Time): Boolean {
+        override fun areItemsTheSame(oldItem: Timer, newItem: Timer): Boolean {
             return oldItem == newItem
         }
-        override fun areContentsTheSame(oldItem: Time, newItem: Time): Boolean {
-            return oldItem.time == newItem.time
+        override fun areContentsTheSame(oldItem: Timer, newItem: Timer): Boolean {
+            return oldItem.timer == newItem.timer
         }
     }
 }

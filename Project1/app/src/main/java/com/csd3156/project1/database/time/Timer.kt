@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "time_table")
-class Time (
-    @ColumnInfo(name = "time") val time: Double,
+class Timer (
+    @ColumnInfo(name = "time") val timer: String,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

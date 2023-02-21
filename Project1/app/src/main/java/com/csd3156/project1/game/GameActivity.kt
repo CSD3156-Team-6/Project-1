@@ -8,9 +8,19 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.csd3156.project1.R
+import com.csd3156.project1.database.ScoreRepository
+import com.csd3156.project1.database.ScoreRoomDatabase
+import com.csd3156.project1.database.UserPreferencesRepository
+import com.csd3156.project1.database.height.Height
+import com.csd3156.project1.database.height.HeightViewModel
+import com.csd3156.project1.database.height.HeightViewModelFactory
+import com.csd3156.project1.database.time.Timer
+import com.csd3156.project1.database.time.TimerViewModel
+import com.csd3156.project1.database.time.TimerViewModelFactory
 import com.csd3156.project1.databinding.ActivityGameBinding
 import kotlinx.coroutines.*
 import org.w3c.dom.Text
@@ -22,6 +32,19 @@ class GameActivity : AppCompatActivity()
 
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
+
+    private val applicationScope = CoroutineScope(SupervisorJob())
+
+    private val database by lazy { ScoreRoomDatabase.getDatabase(this, applicationScope) }
+    private val repository by lazy { ScoreRepository(database.timeDao(), database.heightDao()) }
+
+    private val timerViewModel: TimerViewModel by viewModels {
+        TimerViewModelFactory(repository, UserPreferencesRepository.getInstance(this))
+    }
+
+    private val heightViewModel: HeightViewModel by viewModels {
+        HeightViewModelFactory(repository, UserPreferencesRepository.getInstance(this))
+    }
 
     //val buttonTextX = findViewById<Button>(R.id.buttontestViewX)
     //val buttonTextY = findViewById<Button>(R.id.buttontestViewY)
@@ -36,6 +59,8 @@ class GameActivity : AppCompatActivity()
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
         supportActionBar?.hide()
+
+        val scoreTextView = binding.idScoreTextView
 
         findViewById<TextView>(R.id.idScoreTextView).text = "0"
         val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
@@ -118,6 +143,7 @@ class GameActivity : AppCompatActivity()
             }
         }
 
+
         //Tilt controls <Accelerometer>
         sensorManager.registerListener(object : SensorEventListener {
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -173,6 +199,8 @@ class GameActivity : AppCompatActivity()
 
     override fun onDestroy()
     {
+        timerViewModel.insert(Timer(binding.idTimeTextView.text.toString()))
+        heightViewModel.insert(Height(binding.idScoreTextView.text.toString().toInt()))
         Snake.alive = false
         Snake.resetSnake()
         super.onDestroy()
