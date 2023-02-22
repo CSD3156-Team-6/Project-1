@@ -7,12 +7,12 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TimeDao {
+interface TimerDao {
     @Query("SELECT * FROM time_table")
-    fun getTime(): Flow<List<Time>>
+    fun getTime(): Flow<List<Timer>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(time: Time)
+    suspend fun insert(timer: Timer)
 
     @Query("DELETE FROM time_table")
     suspend fun clearAll()
