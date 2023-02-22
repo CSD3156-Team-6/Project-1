@@ -3,6 +3,7 @@ package com.csd3156.project1
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.csd3156.project1.database.ScoreActivity
 import com.csd3156.project1.databinding.ActivityMainBinding
