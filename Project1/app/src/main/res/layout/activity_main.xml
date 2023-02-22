@@ -15,20 +15,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/tittle"
+            android:id="@+id/game_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_title" />
 
         <ImageView
-            android:id="@+id/startBtn"
+            android:id="@+id/id_playButton"
             android:paddingTop="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_start_button" />
 
         <ImageView
-            android:id="@+id/settingBtn"
+            android:id="@+id/id_scoreButton"
             android:paddingTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

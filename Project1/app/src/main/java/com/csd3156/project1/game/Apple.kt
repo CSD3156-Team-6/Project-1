@@ -9,8 +9,10 @@ class Apple
 
         fun generateAppleRandom()
         {
-            posX = (1..20).random().toFloat() * 50
-            posY = (1..20).random().toFloat() * 50
+            do {
+                posX = (1..20).random().toFloat() * 50
+                posY = (1..20).random().toFloat() * 50
+            } while (Snake.bodyParts.any { it[0] == posX && it[1] == posY })
         }
     }
 }

@@ -1,112 +1,223 @@
 package com.csd3156.project1.game
 
 import android.content.pm.ActivityInfo
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.csd3156.project1.R
+import com.csd3156.project1.database.ScoreRepository
+import com.csd3156.project1.database.ScoreRoomDatabase
+import com.csd3156.project1.database.UserPreferencesRepository
+import com.csd3156.project1.database.height.Height
+import com.csd3156.project1.database.height.HeightViewModel
+import com.csd3156.project1.database.height.HeightViewModelFactory
+import com.csd3156.project1.database.time.Timer
+import com.csd3156.project1.database.time.TimerViewModel
+import com.csd3156.project1.database.time.TimerViewModelFactory
 import com.csd3156.project1.databinding.ActivityGameBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import org.w3c.dom.Text
 
 class GameActivity : AppCompatActivity()
 {
     private lateinit var binding: ActivityGameBinding
+    private lateinit var job: Job
 
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+
+    private val applicationScope = CoroutineScope(SupervisorJob())
+
+    private val database by lazy { ScoreRoomDatabase.getDatabase(this, applicationScope) }
+    private val repository by lazy { ScoreRepository(database.timeDao(), database.heightDao()) }
+
+    private val timerViewModel: TimerViewModel by viewModels {
+        TimerViewModelFactory(repository, UserPreferencesRepository.getInstance(this))
+    }
+
+    private val heightViewModel: HeightViewModel by viewModels {
+        HeightViewModelFactory(repository, UserPreferencesRepository.getInstance(this))
+    }
+
+    //val buttonTextX = findViewById<Button>(R.id.buttontestViewX)
+    //val buttonTextY = findViewById<Button>(R.id.buttontestViewY)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         supportActionBar?.hide()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
-                while (Snake.alive) {
-                    when (Snake.direction) {
+        val scoreTextView = binding.idScoreTextView
+
+        findViewById<TextView>(R.id.idScoreTextView).text = "0"
+        val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
+        val startTime = System.currentTimeMillis()
+
+        job = CoroutineScope(Dispatchers.IO).launch {
+            while (true)
+            {
+                while (Snake.alive)
+                {
+                    when (Snake.direction)
+                    {
                         "up" -> {
-                            // create new head position
                             Snake.headY -= 50
-                            if (!Snake.IsMovePossible()) {
-                                Snake.alive = false
-                                Snake.resetSnake()
-                            }
+                            // Make head loop to the other side when it goes past
+                            if (Snake.headY < 0f)
+                                Snake.headY = 1000f
                         }
                         "down" -> {
-                            // create new head position
                             Snake.headY += 50
-                            if (!Snake.IsMovePossible()) {
-                                Snake.alive = false
-                                Snake.resetSnake()
-                            }
+                            if (Snake.headY > 1000f)
+                                Snake.headY = 0f
                         }
                         "left" -> {
-                            // create new head position
                             Snake.headX -= 50
-                            if (!Snake.IsMovePossible()) {
-                                Snake.alive = false
-                                Snake.resetSnake()
-                            }
-
+                            if (Snake.headX < 0f)
+                                Snake.headX = 1000f
                         }
                         "right" -> {
-                            // create new head position
                             Snake.headX += 50
-                            if (!Snake.IsMovePossible()) {
-                                Snake.alive = false
-                                Snake.resetSnake()
-                            }
+                            if (Snake.headX > 1000f)
+                                Snake.headX = 0f
                         }
                     }
-                    // convert head to body
+
+                    // kill snake if he bite himself
+                    for(bodyPart in Snake.bodyParts)
+                    {
+                        if (Snake.headX == bodyPart[0] && Snake.headY == bodyPart[1])
+                        {
+                            Snake.alive = false
+                            Snake.resetSnake()
+                        }
+                    }
+
+                    // Convert the snake head to a body
                     Snake.bodyParts.add(arrayOf(Snake.headX, Snake.headY))
 
-                    // delete tail if not eat
+                    //If apple is eaten, then we dont delete the tail, leaving the snake extended by 1
                     if (Snake.headX == Apple.posX && Snake.headY == Apple.posY)
+                    {
+                        withContext(Dispatchers.Main) {
+                            val textView = findViewById<TextView>(R.id.idScoreTextView)
+                            val currentValue = textView.text.toString().toInt()
+                            val newValue = currentValue + 1
+                            textView.text = newValue.toString()
+                        }
                         Apple.generateAppleRandom()
+                    }
                     else
                         Snake.bodyParts.removeAt(0)
 
-                    //game speed in millisecond
+                    // Game speed
                     findViewById<CanvasView>(R.id.gameCanvasID).invalidate()
-                    delay(150)
+
+                    //Get Time
+                    withContext(Dispatchers.Main) {
+                        val elapsedTime = System.currentTimeMillis() - startTime
+                        val elapsedSeconds = elapsedTime / 1000
+                        val formattedTime = String.format(
+                            "%02d:%02d",
+                            (elapsedSeconds % 3600) / 60,
+                            elapsedSeconds % 60
+                        )
+                        timeTextView.text = formattedTime
+                    }
+
+                    delay(200)
                 }
             }
         }
 
-        // Up
-        findViewById<Button>(R.id.buttonUpID).setOnClickListener {
-            Snake.alive = true
-            if(Snake.direction != "down")
-                Snake.direction = "up"
-        }
 
-        //Down
-        findViewById<Button>(R.id.buttonDownID).setOnClickListener {
-            Snake.alive = true
-            if (Snake.direction != "up")
-                Snake.direction = "down"
-        }
+        //Tilt controls <Accelerometer>
+        sensorManager.registerListener(object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                // do nothing
+            }
 
-        //Left
-        findViewById<Button>(R.id.buttonLeftID).setOnClickListener{
-            Snake.alive = true
-            if (Snake.direction != "right")
-                Snake.direction = "left"
-        }
+            override fun onSensorChanged(event: SensorEvent?) {
+                if (event != null && event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                    val x = event.values[0]
+                    val y = event.values[1]
+                    val z = event.values[2]
+                    // perform calculations with x, y, and z values to detect tilt
+                    val textViewtextX = findViewById<TextView>(R.id.textViewtiltvalX)
+                    val textViewtextY = findViewById<TextView>(R.id.textViewtiltvalY)
+                    textViewtextX.text =  x.toString()
+                    textViewtextY.text =  y.toString()
+                    if ( x < -5)
+                    {
+                        // device is tilted to the right
+                        Snake.alive = true
+                        if (Snake.direction != "left")
+                            Snake.direction = "right"
+                    } else if (x > 5)
+                    {
+                        // device is tilted to the left
+                        Snake.alive = true
+                        if (Snake.direction != "right")
+                            Snake.direction = "left"
+                    }
+                    else if (y > 5)
+                    {
+                        // device is tilted to the bottom
+                        Snake.alive = true
+                        if(Snake.direction != "up")
+                            Snake.direction = "down"
+                    }
+                    else if (y< -5)
+                    {
+                        // device is tilted to the top
+                        Snake.alive = true
+                        if(Snake.direction != "down")
+                            Snake.direction = "up"
+                    }
+                    else {
+                        // device is not tilted left or right
+                        //Snake.alive =false
+                    }
 
-        //Right
-        findViewById<Button>(R.id.buttonRightID).setOnClickListener {
-            Snake.alive = true
-            if (Snake.direction != "left")
-                Snake.direction = "right"
-        }
-
+                }
+            }
+        }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
     }
+
+    override fun onDestroy()
+    {
+        timerViewModel.insert(Timer(binding.idTimeTextView.text.toString()))
+        heightViewModel.insert(Height(binding.idScoreTextView.text.toString().toInt()))
+        Snake.alive = false
+        Snake.resetSnake()
+        super.onDestroy()
+        job.cancel()
+    }
+
+    override fun onPause()
+    {
+        Snake.alive = false
+        super.onPause()
+    }
+
+    override fun onStop()
+    {
+        Snake.alive = false
+        super.onStop()
+    }
+
+
 }
