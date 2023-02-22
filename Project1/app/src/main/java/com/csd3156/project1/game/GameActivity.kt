@@ -23,7 +23,6 @@ import com.csd3156.project1.database.time.TimerViewModel
 import com.csd3156.project1.database.time.TimerViewModelFactory
 import com.csd3156.project1.databinding.ActivityGameBinding
 import kotlinx.coroutines.*
-import org.w3c.dom.Text
 
 class GameActivity : AppCompatActivity()
 {
@@ -46,8 +45,6 @@ class GameActivity : AppCompatActivity()
         HeightViewModelFactory(repository, UserPreferencesRepository.getInstance(this))
     }
 
-    //val buttonTextX = findViewById<Button>(R.id.buttontestViewX)
-    //val buttonTextY = findViewById<Button>(R.id.buttontestViewY)
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -63,8 +60,8 @@ class GameActivity : AppCompatActivity()
         val scoreTextView = binding.idScoreTextView
 
         findViewById<TextView>(R.id.idScoreTextView).text = "0"
+        var startTime = System.currentTimeMillis()
         val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
-        val startTime = System.currentTimeMillis()
 
         job = CoroutineScope(Dispatchers.IO).launch {
             while (true)
@@ -101,6 +98,12 @@ class GameActivity : AppCompatActivity()
                     {
                         if (Snake.headX == bodyPart[0] && Snake.headY == bodyPart[1])
                         {
+                            timerViewModel.insert(Timer(binding.idTimeTextView.text.toString()))
+                            heightViewModel.insert(Height(binding.idScoreTextView.text.toString().toInt()))
+
+                            findViewById<TextView>(R.id.idScoreTextView).text = "0"
+                            startTime = System.currentTimeMillis()
+
                             Snake.alive = false
                             Snake.resetSnake()
                         }
@@ -137,8 +140,7 @@ class GameActivity : AppCompatActivity()
                         )
                         timeTextView.text = formattedTime
                     }
-
-                    delay(200)
+                    delay(150)
                 }
             }
         }
@@ -203,8 +205,8 @@ class GameActivity : AppCompatActivity()
         heightViewModel.insert(Height(binding.idScoreTextView.text.toString().toInt()))
         Snake.alive = false
         Snake.resetSnake()
-        super.onDestroy()
         job.cancel()
+        super.onDestroy()
     }
 
     override fun onPause()
