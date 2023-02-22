@@ -140,7 +140,7 @@ class GameActivity : AppCompatActivity()
                         )
                         timeTextView.text = formattedTime
                     }
-                    delay(150)
+                    delay(200)
                 }
             }
         }
@@ -170,7 +170,8 @@ class GameActivity : AppCompatActivity()
                         Snake.alive = true
                         if (Snake.direction != "left")
                             Snake.direction = "right"
-                    } else if (x > 5)
+                    }
+                    else if (x > 5)
                     {
                         Snake.alive = true
                         if (Snake.direction != "right")
@@ -188,7 +189,6 @@ class GameActivity : AppCompatActivity()
                         if(Snake.direction != "down")
                             Snake.direction = "up"
                     }
-
                 }
             }
         }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
