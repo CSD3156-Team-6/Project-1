@@ -140,7 +140,7 @@ class GameActivity : AppCompatActivity()
                         )
                         timeTextView.text = formattedTime
                     }
-                    delay(150)
+                    delay(200)
                 }
             }
         }
@@ -154,46 +154,41 @@ class GameActivity : AppCompatActivity()
 
             override fun onSensorChanged(event: SensorEvent?) {
                 if (event != null && event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+
                     val x = event.values[0]
                     val y = event.values[1]
-                    val z = event.values[2]
-                    // perform calculations with x, y, and z values to detect tilt
-                    val textViewtextX = findViewById<TextView>(R.id.textViewtiltvalX)
-                    val textViewtextY = findViewById<TextView>(R.id.textViewtiltvalY)
-                    textViewtextX.text =  x.toString()
-                    textViewtextY.text =  y.toString()
+
+
+                    val textViewTextX = findViewById<TextView>(R.id.textViewtiltvalX)
+                    val textViewTextY = findViewById<TextView>(R.id.textViewtiltvalY)
+
+                    textViewTextX.text =  x.toString()
+                    textViewTextY.text =  y.toString()
+
                     if ( x < -5)
                     {
-                        // device is tilted to the right
                         Snake.alive = true
                         if (Snake.direction != "left")
                             Snake.direction = "right"
-                    } else if (x > 5)
+                    }
+                    else if (x > 5)
                     {
-                        // device is tilted to the left
                         Snake.alive = true
                         if (Snake.direction != "right")
                             Snake.direction = "left"
                     }
                     else if (y > 5)
                     {
-                        // device is tilted to the bottom
                         Snake.alive = true
                         if(Snake.direction != "up")
                             Snake.direction = "down"
                     }
-                    else if (y< -5)
+                    else if (y< -3)
                     {
-                        // device is tilted to the top
                         Snake.alive = true
                         if(Snake.direction != "down")
                             Snake.direction = "up"
                     }
-                    else {
-                        // device is not tilted left or right
-                        //Snake.alive =false
-                    }
-
                 }
             }
         }, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
