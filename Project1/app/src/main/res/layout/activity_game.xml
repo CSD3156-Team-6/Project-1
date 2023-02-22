@@ -24,11 +24,11 @@
         android:id="@+id/idAppleImageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/idTopFrameImageView"
         app:layout_constraintStart_toStartOf="@+id/idTopFrameImageView"
         app:layout_constraintTop_toTopOf="@+id/idTopFrameImageView"
-        app:layout_constraintVertical_bias="0.485"
+        app:layout_constraintVertical_bias="0.365"
         app:srcCompat="@drawable/apple"
         android:contentDescription="@string/apple_ui"/>
 
