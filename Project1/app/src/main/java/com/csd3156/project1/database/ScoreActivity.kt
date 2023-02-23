@@ -1,10 +1,12 @@
 package com.csd3156.project1.database
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.csd3156.project1.R
 import com.csd3156.project1.database.height.HeightListAdapter
 import com.csd3156.project1.database.height.HeightViewModel
 import com.csd3156.project1.database.height.HeightViewModelFactory
@@ -55,5 +57,11 @@ class ScoreActivity : AppCompatActivity() {
         heightViewModel.allHeight.observe(this, Observer { height ->
             height?.let { heightAdapter.submitList(it) }
         })
+
+        val resetBtn = findViewById<Button>(R.id.resetDataBtn)
+        resetBtn.setOnClickListener {
+            timerViewModel.clear()
+            heightViewModel.clear()
+        }
     }
 }

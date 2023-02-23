@@ -20,4 +20,6 @@
     <string name="apple_ui">Apple UI</string>
     <string name="game_frame_ui">Game Frame UI</string>
 
+    <string name="resetData">Reset Data</string>
+
 </resources>

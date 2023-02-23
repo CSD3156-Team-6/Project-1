@@ -62,7 +62,10 @@ class GameActivity : AppCompatActivity()
         scoreTextView.text = "0"
         var startTime = System.currentTimeMillis()
         val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
-        Snake.snakeInitalLength(2)
+
+        // add length at the start
+        if(Snake.bodyParts.size <= 1)
+            Snake.snakeInitalLength(2)
 
         job = CoroutineScope(Dispatchers.IO).launch {
             while (true)
@@ -163,11 +166,11 @@ class GameActivity : AppCompatActivity()
                     val y = event.values[1]
 
 
-                    val textViewTextX = findViewById<TextView>(R.id.textViewtiltvalX)
-                    val textViewTextY = findViewById<TextView>(R.id.textViewtiltvalY)
-
-                    textViewTextX.text =  x.toString()
-                    textViewTextY.text =  y.toString()
+//                    val textViewTextX = findViewById<TextView>(R.id.textViewtiltvalX)
+//                    val textViewTextY = findViewById<TextView>(R.id.textViewtiltvalY)
+//
+//                    textViewTextX.text =  x.toString()
+//                    textViewTextY.text =  y.toString()
 
                     if ( x < -5)
                     {

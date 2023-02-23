@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ui_frame_white_rect"
+        app:srcCompat="@drawable/ui_frame_white_dotted_rect"
         android:contentDescription="@string/top_frame_ui"/>
 
     <ImageView
@@ -77,29 +77,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--    CEDRIC'S STUFF -->
-    <TextView
-        android:id="@+id/textViewtiltvalX"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="616dp"
-        android:text=" X value:"
-        android:textColor="#FFFFFF"
-        android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/textViewtiltvalX"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:layout_marginTop="616dp"-->
+<!--        android:text=" X value:"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="30dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/textViewtiltvalY"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="564dp"
-        android:text=" Y value:"
-        android:textColor="#FFFFFF"
-        android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/textViewtiltvalY"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:layout_marginTop="564dp"-->
+<!--        android:text=" Y value:"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="30dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

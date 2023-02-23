@@ -12,6 +12,7 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val snakeBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.snake_body)
     private val appleBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.apple)
     private val snakeHeadBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.snake_head)
+    private val bg : Bitmap = BitmapFactory.decodeResource(resources,R.drawable.game_background)
 
     override fun onDraw(canvas: Canvas?)
     {
@@ -19,7 +20,8 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         floor.color = Color.DKGRAY
 
-        canvas?.drawRect(0f,0f,1050f,1050f,floor)
+        //canvas?.drawRect(0f,0f,1050f,1050f,floor)
+        canvas?.drawBitmap(bg,0f, 0f, floor)
 
         var count = 1
         for (i in Snake.bodyParts)
