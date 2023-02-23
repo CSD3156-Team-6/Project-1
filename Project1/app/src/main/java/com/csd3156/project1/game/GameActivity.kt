@@ -59,9 +59,10 @@ class GameActivity : AppCompatActivity()
 
         val scoreTextView = binding.idScoreTextView
 
-        findViewById<TextView>(R.id.idScoreTextView).text = "0"
+        scoreTextView.text = "0"
         var startTime = System.currentTimeMillis()
         val timeTextView = findViewById<TextView>(R.id.idTimeTextView)
+        Snake.snakeInitalLength(2)
 
         job = CoroutineScope(Dispatchers.IO).launch {
             while (true)
@@ -101,7 +102,10 @@ class GameActivity : AppCompatActivity()
                             timerViewModel.insert(Timer(binding.idTimeTextView.text.toString()))
                             heightViewModel.insert(Height(binding.idScoreTextView.text.toString().toInt()))
 
-                            findViewById<TextView>(R.id.idScoreTextView).text = "0"
+                            runOnUiThread {
+                                scoreTextView.text = "0"
+                            }
+
                             startTime = System.currentTimeMillis()
 
                             Snake.alive = false
