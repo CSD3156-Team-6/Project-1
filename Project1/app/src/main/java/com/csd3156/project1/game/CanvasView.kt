@@ -21,8 +21,9 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         floor.color = Color.DKGRAY
 
         //canvas?.drawRect(0f,0f,1050f,1050f,floor)
-        canvas?.drawBitmap(bg,0f, 0f, floor)
-
+        val bgRect = RectF(0f, 0f, 1050f, 1050f)
+        canvas?.drawBitmap(bg, null, bgRect, null)
+        
         var count = 1
         for (i in Snake.bodyParts)
         {
