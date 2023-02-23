@@ -17,12 +17,20 @@ class Snake
             return true
         }
 
+        fun snakeInitalLength(length: Int) {
+            repeat(length) {
+                // Convert the snake head to a body
+                Snake.bodyParts.add(arrayOf(Snake.headX, Snake.headY))
+            }
+        }
+
         fun resetSnake()
         {
             headX = 0f;
             headY = 0f;
             bodyParts = mutableListOf(arrayOf(0f, 0f))
             direction = "right";
+            snakeInitalLength(2)
         }
     }
 }
